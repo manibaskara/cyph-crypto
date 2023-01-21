@@ -2,6 +2,7 @@ import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import type {RouteProp} from '@react-navigation/native';
 
 export type DashboardStackParamsList = {
+  Portfolios: undefined;
   Browsers: undefined;
 };
 
