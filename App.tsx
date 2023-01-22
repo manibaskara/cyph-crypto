@@ -9,11 +9,14 @@ import React from 'react';
 
 import Navigation from './src/navigation/navigation';
 import PortfolioProvider from './src/screens/Portfolio/PortfolioProvider';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
 function App(): JSX.Element {
   return (
     <PortfolioProvider>
-      <Navigation />
+      <BottomSheetModalProvider>
+        <Navigation />
+      </BottomSheetModalProvider>
     </PortfolioProvider>
   );
 }

@@ -90,7 +90,7 @@ const Navigation = () => {
                 iconName = focused ? 'globe' : 'globe-outline';
                 break;
               case 'Portfolio':
-                iconName = focused ? 'wallet' : 'wallet-outline';
+                iconName = focused ? 'pie-chart' : 'pie-chart-outline';
                 break;
               case 'Shortcuts':
                 iconName = focused ? 'md-grid' : 'md-grid-outline';
@@ -104,8 +104,8 @@ const Navigation = () => {
             return <Ionicons name={iconName} size={size} color={color} />;
           },
         })}>
-        <Tab.Screen name="Browser" component={DashboardStackScreen} />
         <Tab.Screen name="Portfolio" component={PortfolioStackScreen} />
+        <Tab.Screen name="Browser" component={DashboardStackScreen} />
         <Tab.Screen name="Shortcuts" component={ShortcutsStackScreen} />
         <Tab.Screen name="Options" component={OptionsStackScreen} />
       </Tab.Navigator>

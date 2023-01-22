@@ -1,14 +1,14 @@
 import React from 'react';
-import {StyleSheet, SafeAreaView, View} from 'react-native';
-import {usePortfolioDataContext} from './PortfolioContext';
+import {StyleSheet, SafeAreaView} from 'react-native';
+
+import PortfolioHeader from './PortfolioHeader';
+import CoinList from './CoinList';
 
 const Portfolio = () => {
-  const {portfolioData, isFetching, fetchPortfolioData} =
-    usePortfolioDataContext();
-
   return (
     <SafeAreaView style={styles.container}>
-      <View>{'Portfolio'}</View>
+      <PortfolioHeader />
+      <CoinList />
     </SafeAreaView>
   );
 };
@@ -16,8 +16,7 @@ const Portfolio = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: 'white',
   },
 });
 

@@ -43,7 +43,12 @@ export interface PortfolioContextType {
     React.SetStateAction<PortfoliosResponse | null>
   >;
   fetchPortfolioData: () => Promise<PortfoliosResponse | null>;
+  selectedChain: ChainPortfoliosEntity | null;
+  setSelectedChain: React.Dispatch<
+    React.SetStateAction<ChainPortfoliosEntity | null>
+  >;
   isFetching: boolean;
+  cacheAge?: number | null;
 }
 
 export const PortfolioContext = React.createContext<PortfolioContextType>({
@@ -54,14 +59,14 @@ export const PortfolioContext = React.createContext<PortfolioContextType>({
   fetchPortfolioData: () => {
     return Promise.reject();
   },
+  selectedChain: null,
+  setSelectedChain: () => {
+    //do nothing
+  },
   isFetching: false,
+  cacheAge: null,
 });
 
 export const usePortfolioDataContext = () => {
-  const portfolioDataContext = useContext(PortfolioContext);
-  if (!portfolioDataContext) {
-    throw new Error('usePortfolioData not used within PortfolioProvider');
-  }
-
-  return portfolioDataContext;
+  return useContext(PortfolioContext);
 };
