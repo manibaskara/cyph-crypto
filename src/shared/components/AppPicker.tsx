@@ -1,5 +1,12 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {View, StyleSheet, FlatList, Text, Pressable} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Text,
+  Pressable,
+  ListRenderItem,
+} from 'react-native';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {colors} from '../../constants';
 import Button from '../../shared/components/Button';
@@ -43,6 +50,27 @@ const AppPicker: React.FC<Props> = ({
     bottomSheetModalRef.current?.close();
   };
 
+  const renderItem: ListRenderItem<any> = ({item, index}) => {
+    return (
+      <Pressable
+        testID={`picker-item-${index}`}
+        style={[
+          styles.buttonStyle,
+          // eslint-disable-next-line react-native/no-inline-styles
+          {
+            backgroundColor:
+              value && item[idField] === value[idField]
+                ? colors.chip
+                : 'transparent',
+          },
+        ]}
+        onPress={() => handleItemSelect(item)}>
+        <Text style={styles.title}>{item[valueField]}</Text>
+        <Divider />
+      </Pressable>
+    );
+  };
+
   return (
     <View>
       <View style={styles.row}>
@@ -72,26 +100,7 @@ const AppPicker: React.FC<Props> = ({
             keyExtractor={item => {
               return item[idField];
             }}
-            renderItem={({item, index}) => {
-              return (
-                <Pressable
-                  testID={`picker-item-${index}`}
-                  style={[
-                    styles.buttonStyle,
-                    // eslint-disable-next-line react-native/no-inline-styles
-                    {
-                      backgroundColor:
-                        value && item[idField] === value[idField]
-                          ? colors.chip
-                          : 'transparent',
-                    },
-                  ]}
-                  onPress={() => handleItemSelect(item)}>
-                  <Text style={styles.title}>{item[valueField]}</Text>
-                  <Divider />
-                </Pressable>
-              );
-            }}
+            renderItem={renderItem}
           />
         </BottomSheetModal>
       ) : null}
