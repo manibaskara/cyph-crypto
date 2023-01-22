@@ -31,22 +31,21 @@ export const PortfolioProvider: React.FC<Props> = ({children}) => {
         setCacheAge(age);
         if (age < CACHE_EXPIRY) {
           return Promise.resolve(portfolioData);
+        } else {
+          //clear cache after expiry
+          setPortfolioData(null);
         }
       }
 
       setIsFetching(true);
       const res = await fetch(PORTFOLIO_URL);
-      if (res.ok) {
-        const dataObj: PortfoliosResponse = await res.json();
-        addAllChainsDataInFirstElement(dataObj);
-        setPortfolioData(dataObj);
-        cachedTimeAgo.current = Date.now();
-        setCacheAge(0);
-        setIsFetching(false);
-        return Promise.resolve(dataObj);
-      }
+      const dataObj: PortfoliosResponse = await res.json();
+      addAllChainsDataInFirstElement(dataObj);
+      setPortfolioData(dataObj);
+      cachedTimeAgo.current = Date.now();
+      setCacheAge(0);
       setIsFetching(false);
-      return Promise.reject(res);
+      return Promise.resolve(dataObj);
     } catch (e) {
       cachedTimeAgo.current = undefined;
       setCacheAge(undefined);

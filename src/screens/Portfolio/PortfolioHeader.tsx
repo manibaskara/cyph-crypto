@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View, ImageBackground, Text} from 'react-native';
 import {usePortfolioDataContext} from './PortfolioContext';
 import AppPicker from '../../shared/components/AppPicker';
@@ -12,14 +12,8 @@ const PortfolioHeader = () => {
 
   const chainEntities = portfolioData?.record?.chain_portfolios || [];
 
-  const isFirstItemSelected = useRef(false);
-
   useEffect(() => {
-    if (
-      !isFirstItemSelected.current &&
-      portfolioData?.record?.chain_portfolios?.[0]
-    ) {
-      isFirstItemSelected.current = true;
+    if (portfolioData?.record?.chain_portfolios?.[0]) {
       setSelectedChain(portfolioData.record.chain_portfolios[0]);
     }
   }, [portfolioData, setSelectedChain]);
