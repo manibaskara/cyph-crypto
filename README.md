@@ -4,7 +4,7 @@
 
 - Fetch request has been cached for 5 mins.
 - Any subsequent requests will be served from the value.
-- Last updated time gets updated every 10 seconds.
+- Last updated time gets updated every 20 seconds.
 - When the data is expired and refreshed from the server, the corresponding components will be updated.
 - Using ContextAPI to Store the Application State.
 

@@ -7,7 +7,7 @@ export const colors = {
 
 export const CACHE_EXPIRY = 5 * 60; // 5 minutes
 
-export const CACHE_AGE_UPDATE_TIME = 20 * 1000; // 1 minute
+export const CACHE_AGE_UPDATE_TIME = 20 * 1000; // 20 seconds
 
 export const PORTFOLIO_URL =
   'https://api.jsonbin.io/v3/b/62ea5f481c7f436f211de6ef';
