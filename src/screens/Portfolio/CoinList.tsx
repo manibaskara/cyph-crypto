@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   RefreshControl,
   StyleSheet,
@@ -8,21 +8,17 @@ import {
   Image,
   ListRenderItem,
 } from 'react-native';
-import CheckBox from '../../shared/components/Checkbox';
 
 import Divider from '../../shared/components/Divider';
-import {TokenHoldingsEntity, usePortfolioDataContext} from './PortfolioContext';
-import {convertToDollar, timeSince} from '../../utils/util';
+import {convertToDollar} from '../../utils/util';
+import {TokenHoldingsEntity} from '../../context/types';
+import {useApiContext} from '../../context/useApiContext';
 
-const CoinList: React.FC = () => {
-  const {isFetching, fetchPortfolioData, selectedChain, cacheAge} =
-    usePortfolioDataContext();
-
-  const isSelectedChainNotEmpty =
-    selectedChain?.token_holdings &&
-    selectedChain?.token_holdings?.length !== 0;
-
-  const [isOnlyVerified, setIsOnlyVerified] = useState(false);
+type Props = {
+  totalHoldings?: TokenHoldingsEntity[] | null;
+};
+const CoinList: React.FC<Props> = ({totalHoldings = []}) => {
+  const {portfolioData, fetchPortFolioData} = useApiContext();
 
   const renderItem: ListRenderItem<TokenHoldingsEntity> = ({item}) => {
     return (
@@ -66,47 +62,25 @@ const CoinList: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Divider />
-      <View style={styles.rowSpaced}>
-        <Text style={styles.timerText}>
-          {cacheAge !== undefined && cacheAge !== null
-            ? 'Last updated: ' + timeSince(cacheAge)
-            : ''}
-        </Text>
-        {isSelectedChainNotEmpty ? (
-          <CheckBox
-            isChecked={isOnlyVerified}
-            onPress={() => setIsOnlyVerified(!isOnlyVerified)}
-            title="Only verified coins"
-          />
-        ) : null}
-      </View>
-      <Divider />
-      <FlatList
-        testID="portfolio-list"
-        style={styles.container}
-        refreshControl={
-          <RefreshControl
-            refreshing={isFetching}
-            onRefresh={fetchPortfolioData}
-          />
-        }
-        contentContainerStyle={
-          !isSelectedChainNotEmpty && styles.listEmptyContainer
-        }
-        data={
-          isOnlyVerified
-            ? selectedChain?.token_holdings?.filter(item => item.is_verified)
-            : selectedChain?.token_holdings
-        }
-        ListEmptyComponent={renderEmpty}
-        renderItem={renderItem}
-        keyExtractor={item => {
-          return item.symbol;
-        }}
-      />
-    </View>
+    <FlatList
+      testID="portfolio-list"
+      style={styles.container}
+      refreshControl={
+        <RefreshControl
+          refreshing={portfolioData?.isFetching}
+          onRefresh={fetchPortFolioData}
+        />
+      }
+      contentContainerStyle={
+        totalHoldings?.length === 0 && styles.listEmptyContainer
+      }
+      data={totalHoldings}
+      ListEmptyComponent={portfolioData.isFetching ? null : renderEmpty}
+      renderItem={renderItem}
+      keyExtractor={item => {
+        return item.symbol;
+      }}
+    />
   );
 };
 

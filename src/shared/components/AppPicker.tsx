@@ -13,7 +13,7 @@ import Button from '../../shared/components/Button';
 import Divider from './Divider';
 
 type Props = {
-  data: any[];
+  data?: any[] | null;
   idField: string;
   valueField: string;
   value: any;

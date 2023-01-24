@@ -8,16 +8,24 @@
 import React from 'react';
 
 import Navigation from './src/navigation/navigation';
-import PortfolioProvider from './src/screens/Portfolio/PortfolioProvider';
+import APIContextProvider from './src/context/APIContextProvider';
+
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+import {PORTFOLIO_URL, RESULT_MOCK} from './src/constants';
+import fetchMock from 'fetch-mock';
+
+fetchMock.mock(PORTFOLIO_URL, RESULT_MOCK, {
+  delay: 1000,
+  overwriteRoutes: true,
+});
 
 function App(): JSX.Element {
   return (
-    <PortfolioProvider>
+    <APIContextProvider>
       <BottomSheetModalProvider>
         <Navigation />
       </BottomSheetModalProvider>
-    </PortfolioProvider>
+    </APIContextProvider>
   );
 }
 

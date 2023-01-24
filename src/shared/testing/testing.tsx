@@ -1,7 +1,7 @@
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {render as rtlRender, RenderAPI} from '@testing-library/react-native';
 import React, {ReactElement} from 'react';
-import PortfolioProvider from '../../screens/Portfolio/PortfolioProvider';
+import APIContextProvider from '../../context/APIContextProvider';
 
 const flushPromises = () => new Promise(setImmediate);
 
@@ -11,9 +11,9 @@ type Props = {
 
 const Providers: React.FC<Props> = ({children}): ReactElement => {
   return (
-    <PortfolioProvider>
+    <APIContextProvider>
       <BottomSheetModalProvider>{children}</BottomSheetModalProvider>
-    </PortfolioProvider>
+    </APIContextProvider>
   );
 };
 

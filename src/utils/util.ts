@@ -1,8 +1,9 @@
+import {CACHE_EXPIRY} from '../constants';
 import {
   ChainPortfoliosEntity,
   PortfoliosResponse,
   TokenHoldingsEntity,
-} from '../screens/Portfolio/PortfolioContext';
+} from '../context/types';
 
 const intervals = [
   {label: 'Year', seconds: 31536000},
@@ -10,25 +11,35 @@ const intervals = [
   {label: 'Day', seconds: 86400},
   {label: 'Hour', seconds: 3600},
   {label: 'Min', seconds: 60},
-  {label: 'Sec', seconds: 1},
+  {label: 'Sec', seconds: 10},
   {label: 'Sec', seconds: 0},
 ];
 
-export function timeSince(age: number | null) {
+export function timeSince(timeStamp: number): string {
+  let age = (Date.now() - timeStamp) / 1000;
+
   if (age === null || age === undefined) {
-    return;
+    return '-';
   }
-  if (age === 0) {
-    return 'Just now';
+  if (age < 10) {
+    return 'Just Now';
   }
+  if (age < 60) {
+    return '< 1 Min Ago';
+  }
+
   const interval = intervals.find(i => i.seconds < age);
   if (interval) {
     const count = Math.floor(age / interval.seconds);
-    if (interval.seconds < 60) {
-      return '< 1 Min ago';
-    }
+
     return `${count} ${interval.label}${count !== 1 ? 's' : ''} ago`;
   }
+  return '-';
+}
+
+export function isCacheExpired(timeStamp: number): boolean {
+  let age = (Date.now() - timeStamp) / 1000;
+  return age > CACHE_EXPIRY;
 }
 
 export function convertToDollar(amount?: string) {
@@ -39,6 +50,15 @@ export function convertToDollar(amount?: string) {
 }
 
 export function addAllChainsDataInFirstElement(dataObj: PortfoliosResponse) {
+  if (
+    !dataObj?.record?.chain_portfolios?.length ||
+    dataObj.record.chain_portfolios.length === 0
+  ) {
+    return dataObj;
+  }
+  if (dataObj.record.chain_portfolios[0].chain_id === 'ALL CHAINS') {
+    return dataObj;
+  }
   const masterObj: ChainPortfoliosEntity = {
     total_value: '0',
     unverfied_total_value: '0',
@@ -64,4 +84,5 @@ export function addAllChainsDataInFirstElement(dataObj: PortfoliosResponse) {
 
   masterObj.token_holdings = masterArr;
   dataObj.record.chain_portfolios?.unshift(masterObj);
+  return dataObj;
 }
